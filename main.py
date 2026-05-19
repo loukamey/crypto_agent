@@ -95,7 +95,7 @@ def hourly_check():
     urgent = check_urgent(coins)
     if urgent:
         reason = urgent[0]
-        alert = f"🚨🔴🚨🔴🚨🔴🚨🔴🚨\n\n<b>LOUKA — ACT NOW</b>\n\n{reason}\n\n→ Check Binance immediately\n\n⏰ {datetime.now().strftime('%H:%M')} Dubai time"
+        alert = f"🚨‼️\n\n<b>LOUKA — ACT NOW</b>\n\n{reason}\n\n→ Check Binance immediately\n\n⏰ {datetime.now().strftime('%H:%M')} Dubai time"
         send_telegram(alert)
         print("URGENT CRYPTO ALERT SENT")
 
