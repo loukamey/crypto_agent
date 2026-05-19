@@ -27,7 +27,7 @@ def send_telegram(message):
 def get_crypto_data():
     try:
         ids = ",".join(COINS)
-        url = f"https://api.coingecko.com/api/v3/simple/price?ids={ids}&vs_currencies=usd,aed&include_24hr_change=true&include_24hr_vol=true"
+        url = f"https://api.coingecko.com/api/v3/simple/price?ids={ids}&vs_currencies=usd,aed&include_24hr_change=true"
         response = requests.get(url, timeout=15)
         data = response.json()
         coins = []
@@ -48,25 +48,23 @@ def check_urgent(coins):
     urgent = []
     for coin in coins:
         change = abs(float(coin.get("change_24h", 0)))
-        if change >= 10:
-            direction = "🚀 SURGED" if coin["change_24h"] > 0 else "💥 CRASHED"
+        if change >= 15:
+            direction = "surged" if coin["change_24h"] > 0 else "crashed"
             urgent.append(f"{coin['name'].upper()} {direction} {coin['change_24h']:.1f}% — now ${coin['price_usd']}")
     return urgent
 
 def generate_report(coins):
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
-    prompt = f"""You are Louka's personal crypto advisor. Louka is 13, lives in Dubai, MAX 1,500 AED into crypto. Parents help with buying.
+    prompt = f"""You are Louka's personal crypto advisor. 13, Dubai, MAX 1,500 AED crypto. Parents help buy.
 
 Today: {datetime.now().strftime("%B %d, %Y")}
-Crypto data: {json.dumps(coins, indent=2)}
-
-Write his daily crypto brief:
+Data: {json.dumps(coins, indent=2)}
 
 Hey Louka 👋 Crypto check for today:
 
 🚀 TOP PICK TODAY
-- [Coin] at [AED price] — [why]
-- Suggested amount: [X] AED
+- [Coin] at [AED] — [why]
+- Suggested: [X] AED
 
 💰 YOUR MOVES TODAY
 - [X] AED → [Coin] — [reason]
@@ -77,12 +75,12 @@ Hey Louka 👋 Crypto check for today:
 - [Coin] — [reason]
 
 ⚠️ MARKET MOOD
-- [One sentence on crypto market]
+- [One sentence]
 
 👀 WATCH THIS WEEK
-- [One thing to watch]
+- [One thing]
 
-Total suggested: MAX 200-400 AED."""
+Max 200-400 AED today."""
 
     message = client.messages.create(
         model="claude-opus-4-5",
@@ -96,23 +94,20 @@ def hourly_check():
     coins = get_crypto_data()
     urgent = check_urgent(coins)
     if urgent:
-        alert = "🚨🚨🚨 <b>URGENT CRYPTO ALERT</b> 🚨🚨🚨\n\nLouka, massive crypto move happening NOW!\n\n"
-        for u in urgent:
-            alert += f"⚡ {u}\n"
-        alert += f"\nThis could be a huge opportunity or warning!\nShow your parents immediately!\n\n⏰ {datetime.now().strftime('%H:%M Dubai time')}"
+        reason = urgent[0]
+        alert = f"🚨🔴🚨🔴🚨🔴🚨🔴🚨\n\n<b>LOUKA — ACT NOW</b>\n\n{reason}\n\n→ Check Binance immediately\n\n⏰ {datetime.now().strftime('%H:%M')} Dubai time"
         send_telegram(alert)
         print("URGENT CRYPTO ALERT SENT")
 
 def daily_job():
     print(f"Running crypto scan - {datetime.now()}")
     coins = get_crypto_data()
-    print(f"Got {len(coins)} coins")
     report = generate_report(coins)
     message = f"₿ <b>Your Daily Crypto Brief - {datetime.now().strftime('%B %d, %Y')}</b>\n\n{report}"
     send_telegram(message)
 
-print("Crypto Intelligence Agent is running!")
-print(f"Started at: {datetime.now()}")
+print("Crypto Agent running!")
+print(f"Started: {datetime.now()}")
 daily_job()
 
 schedule.every().day.at("06:00").do(daily_job)
