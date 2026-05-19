@@ -7,7 +7,7 @@ import os
 import anthropic
 
 ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
-TELEGRAM_TOKEN = "8370691561:AAGt5T8XrIRKZOBeI322Jiugk9jw_SKOEjk"
+TELEGRAM_TOKEN = "8618649387:AAEjueDVhm8fZDOf4NAFIE9j2XXZmooqQ7U"
 TELEGRAM_CHAT_ID = "8526660731"
 
 COINS = ["bitcoin", "ethereum", "solana", "binancecoin", "ripple", "cardano", "avalanche-2", "chainlink"]
