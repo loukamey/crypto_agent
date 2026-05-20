@@ -10,7 +10,7 @@ ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
 TELEGRAM_TOKEN = "8618649387:AAEjueDVhm8fZDOf4NAFIE9j2XXZmooqQ7U"
 TELEGRAM_CHAT_ID = "8526660731"
 
-COINS = ["bitcoin", "ethereum", "solana", "binancecoin", "ripple", "cardano", "avalanche-2", "chainlink"]
+COINS = ["bitcoin", "ethereum", "solana", "binancecoin", "ripple", "cardano", "avalanche-2", "chainlink", "polkadot", "uniswap", "polygon", "near", "arbitrum", "optimism", "sui", "aptos", "injective-protocol", "sei-network", "celestia", "jupiter-exchange-solana"]
 
 def send_telegram(message):
     try:
